@@ -4,16 +4,16 @@ Simple library for neural networks(includes backpropagation)
 
 ## How to install
 
-How to import
+Import from Github
 
 ```html
-<script src="https://commandninja.github.io/Neural-Networks/neuralNetworkLib.js"><script>
+<script src="https://commandninja.github.io/Neural-Networks/neuralNetworkLib.js"></script>
 ```
 
-or download the file
+or import from file
 
 ```html
-<script src="neuralNetworkLib.js"><script>
+<script src="neuralNetworkLib.js"></script>
 ```
 
 ## Initializing
