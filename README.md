@@ -73,7 +73,7 @@ ai.maxEpochs = 5000 // max tries a network will try to get better
 
 ```js
 ai.getTotalError(trainingData) // this gets the total error((target-pred)**2)
-ai.forwardPass(inputArr) // this will show you the values of each layer as the input passes through it
+ai.forwardPass(inputArr) // this will return the values of each layer as the input passes through it
 ```
 
 ## Notes
