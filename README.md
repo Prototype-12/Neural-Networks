@@ -76,6 +76,8 @@ ai.getTotalError(trainingData) // this gets the total error((target-pred)**2)
 ai.forwardPass(inputArr) // this will return the values of each layer as the input passes through it
 ```
 
+All functions and values in the class are public so they can be changed
+
 ## Notes
 
 Uses leakyReLU
