@@ -10,8 +10,4 @@ or download the file
 
 `<script src="neuralNetworkLib.js"><script>`
 
-[DEMO](https://www.example.com){:target="_blank"}
-
-<h1>header</h1>
-
-<a href="https://www.WordPress.com">WordPress Homepage</a>
+[DEMO](https://commandninja.github.io/Neural-Networks)
