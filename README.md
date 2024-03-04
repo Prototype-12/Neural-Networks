@@ -14,4 +14,4 @@ or download the file
 
 <h1>header</h1>
 
-<a href="https://www.WordPress.com" target="_blank">WordPress Homepage</a>
+<a href="https://www.WordPress.com">WordPress Homepage</a>
