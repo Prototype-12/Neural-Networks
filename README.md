@@ -10,7 +10,7 @@ Import from Github
 <script src="https://commandninja.github.io/Neural-Networks/neuralNetworkLib.js"></script>
 ```
 
-or import from file
+or download it and import from the file
 
 ```html
 <script src="neuralNetworkLib.js"></script>
