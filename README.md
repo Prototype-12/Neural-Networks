@@ -60,7 +60,7 @@ Settings are local to a network
 ```js
 ai.leakyReLUAlpha = .01 // messes with the leakyReLU function
 ai.learnRate = .01 // multipler for the changes of each epoch
-ai.clampRange = 1 // changes the max a weight or biases is allowed to change each epoch
+ai.clampRange = 1 // changes the max, a weight or bias is allowed to change each epoch
 ai.minError = .001 // min error needed to auto finish
 ai.maxEpochs = 5000 // max tries a network will try to get better
 ```
@@ -73,6 +73,7 @@ ai.maxEpochs = 5000 // max tries a network will try to get better
 
 ```js
 ai.getTotalError(trainingData) // this gets the total error((target-pred)**2)
+ai.forwardPass(inputArr) // this will show you the values of each layer as the input passes through it
 ```
 
 ## Notes
