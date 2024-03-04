@@ -24,7 +24,7 @@ And it supports creating multiple hidden layers
 
 ## Running
 
-`ai.run([3, 4])`
+`js ai.run([3, 4])`
 
 This will return an array with a length of 1 as the first declaration specified
 
