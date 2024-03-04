@@ -6,11 +6,15 @@ Simple library for neural networks(includes backpropagation)
 
 How to import
 
-`<script src="https://commandninja.github.io/Neural-Networks/neuralNetworkLib.js"><script>`
+```html
+<script src="https://commandninja.github.io/Neural-Networks/neuralNetworkLib.js"><script>
+```
 
 or download the file
 
-`<script src="neuralNetworkLib.js"><script>`
+```html
+<script src="neuralNetworkLib.js"><script>
+```
 
 ## Initializing
 
@@ -18,9 +22,10 @@ Initializing creates a random neural network(random weights and biases from -1 t
 
 And it supports creating multiple hidden layers
 
-`var ai = new Neuralnetwork([2, 3, 1])`
-
-`var ai2 = new Neuralnetwork([5, 10, 10, 1])`
+```js
+var ai = new Neuralnetwork([2, 3, 1])
+var ai2 = new Neuralnetwork([5, 10, 10, 1])
+```
 
 ## Running
 
@@ -41,9 +46,9 @@ var trainingData = [
 [[1,0],[1]],
 [[1,1],[0]]
 ]
-```
 
-`ai.train(trainingData) //this will train it`
+ai.train(trainingData) //this will train it
+```
 
 
 [An array containing [arrays that contain an [inputs] and an [outputs array]]]
@@ -52,7 +57,7 @@ var trainingData = [
 
 Settings are local to a network
 
-```
+```js
 ai.leakyReLUAlpha = .01 // messes with the leakyReLU function
 ai.learnRate = .01 // multipler for the changes of each epoch
 ai.clampRange = 1 // changes the max a weight or biases is allowed to change each epoch
@@ -66,7 +71,7 @@ ai.maxEpochs = 5000 // max tries a network will try to get better
 
 ## Advanced
 
-```
+```js
 ai.getTotalError(trainingData) // this gets the total error((target-pred)**2)
 ```
 
