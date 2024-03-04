@@ -9,3 +9,5 @@ How to import
 or download the file
 
 `<script src="neuralNetworkLib.js"><script>`
+
+[DEMO](https://www.example.com)
