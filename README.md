@@ -24,7 +24,8 @@ And it supports creating multiple hidden layers
 
 ## Running
 
-`js ai.run([3, 4])`
+```js
+ai.run([3, 4])```
 
 This will return an array with a length of 1 as the first declaration specified
 
@@ -32,7 +33,7 @@ This will return an array with a length of 1 as the first declaration specified
 
 Training data is formulated like.
 
-```js
+```
 var trainingData = [
 [[0,0],[0]],
 [[0,1],[1]],
