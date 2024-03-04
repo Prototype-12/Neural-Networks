@@ -32,7 +32,7 @@ This will return an array with a length of 1 as the first declaration specified
 
 Training data is formulated like.
 
-```
+```js
 var trainingData = [
 [[0,0],[0]],
 [[0,1],[1]],
@@ -64,7 +64,9 @@ ai.maxEpochs = 5000 // max tries a network will try to get better
 
 ## Advanced
 
-`ai.getTotalError(trainingData) // this gets the total error((target-pred)**2)`
+```
+ai.getTotalError(trainingData) // this gets the total error((target-pred)**2)
+```
 
 ## Notes
 
