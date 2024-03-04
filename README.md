@@ -13,3 +13,5 @@ or download the file
 [DEMO](https://www.example.com){:target="_blank"}
 
 <h1>header</h1>
+
+<a href="http://stackoverflow.com" target="_blank">Go</a>
