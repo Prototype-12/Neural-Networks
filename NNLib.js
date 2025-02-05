@@ -2,14 +2,14 @@ class NeuralNetwork {
   leakyReLUAlpha = .01
   learnRate = .01
   minError = .01
-  maxEpochs = 1e3
+  maxEpochs = 3e3
   weights = []
   biases = []
 
-  constructor (layers, randomStrength=20) {
-      this.initializeWeights(layers)//layer format
-      this.initializeBiases(layers)
-      this.mutate(randomStrength)
+  constructor (layers, options={}) {
+    this.initializeWeights(layers)
+    this.initializeBiases(layers)
+    this.mutate(options.weightsRandomness==undefined?2:options.weightsRandomness)
   }
 
   train(trainData) {
@@ -24,12 +24,11 @@ class NeuralNetwork {
       for (let j=0; j<trainData.length; j++) {
         changeNetworks.push(this.makeChangeNetwork(trainData[j]))
       }
-      //this.applyChangeNetwork(this.averageChangeNetworks(changeNetworks), this.learnRate)//this.learnRate*(i/this.maxEpochs))
       this.applyChangeNetworks(changeNetworks, this.learnRate)//this.learnRate*(i/this.maxEpochs))
 
       networkError = this.getTotalError(trainData)
 
-      if (isNaN(networkError)) {
+      if (isNaN(networkError)) {//revert changes if NaN found
         this.weights = startingWeights
         this.biases = startingBiases
         return this.getExitMessage(i, 1, networkError)
@@ -38,8 +37,6 @@ class NeuralNetwork {
       if (networkError<this.minError) {
         return this.getExitMessage(i, 0, networkError)
       }
-
-      //if (i%1e3==0) console.log("at epoch "+i+" the error is "+networkError)
 
     }
     if (startingError<networkError) {//revert changes if it did not improve
@@ -51,7 +48,7 @@ class NeuralNetwork {
   }
 
   getExitMessage(epochs, exitCode, networkError) {
-    let msg = ["Finished early", "NaN detected(maybe lower learnRate)(training changes revered)", "Score error is greater than when started(training changes revered)", "Ran out of epochs to get network error to min"][exitCode]
+    let msg = ["Finished early", "NaN detected(maybe lower learnRate)(training changes revered)", "Score error is greater than when started(training changes revered)", "Ran out of epochs to get network error to min(maybe increase options.weightsRandomness or maxEpochs or minError)"][exitCode]
     return {epochs: epochs, exitCode: exitCode, msg: msg, networkError: networkError}
   }
 
@@ -110,15 +107,15 @@ class NeuralNetwork {
     let forwardPassData = this.forwardPass(trainingQuestion[0])
     let predError = [this.getError(forwardPassData[0], trainingQuestion[1])]
 
-    for (let i=this.weights.length-1; i>=1; i--) {
+    for (let i=this.weights.length-1; i>=1; i--) {//black magic
       let layerError = []
       let l = this.biases[i-1].length//this.weights[i].length/predError[0].length
       for (let j=0; j<this.weights[i].length; j++) {
         let a = j%l
         let b = Math.floor(j/l)
-        if (b==0) layerError[a] = 0//,console.log("0 layer")
-        layerError[a] += predError[0][b] * this.weights[i][j]//,console.log(a,b,l)
-        if (b==l-1) layerError[a] *= this.leakyReLUDerivative(forwardPassData[i][a])//,console.log("layer finish")
+        if (b==0) layerError[a] = 0
+        layerError[a] += predError[0][b] * this.weights[i][j]
+        if (b==l-1) layerError[a] *= this.leakyReLUDerivative(forwardPassData[i][a])
       }
       predError.unshift(layerError)//add to front
     }
@@ -151,8 +148,8 @@ class NeuralNetwork {
       let a = i%inputArr.length
       let b = Math.floor(i/inputArr.length)
       if (a==0) output[b] = 0
-      output[b] += inputArr[a] * weightsArr[i]//;console.log(a, b)
-      if (a==inputArr.length - 1) output[b] = this.leakyReLU(output[b] + biasArr[b])//;console.log("layer finish")
+      output[b] += inputArr[a] * weightsArr[i]
+      if (a==inputArr.length - 1) output[b] = this.leakyReLU(output[b] + biasArr[b])
     }
     return output
   }
@@ -162,37 +159,20 @@ class NeuralNetwork {
   }
 
   leakyReLUDerivative(v) {
-    if (v>0) {
-      return 1
-    } else {
-      return this.leakyReLUAlpha
-    }
+    return v>0?1:this.leakyReLUAlpha
   }
 
   initializeWeights(layers, randomStrength) {
     for (let i=0; i<layers.length-1; i++) {
       this.weights.push(new Array(layers[i]*layers[i+1]).fill(0))
-      //weights.push(this.createRandomArray(layers[i]*layers[i+1], randomStrength))
     }
   }
 
   initializeBiases(layers, randomStrength) {
     for (let i=0; i<layers.length-1; i++) {
       this.biases.push(new Array(layers[i+1]).fill(0))
-      //biases.push(this.createRandomArray(layers[i+1], randomStrength))
     }
   }
-
-  //createRandomArray(l, randomStrength) {
-  //  return new Array(l).fill(0)
-/*
-    let arr = new Array(l)//[]
-    for (let i=0; i<l; i++) {
-      arr[i] = (Math.random()-.5)*randomStrength
-    }
-    return arr
-*/
-  //}
 
   mutate(mutationStrength) {
     for (let i=0; i<this.weights.length; i++) {
@@ -201,25 +181,11 @@ class NeuralNetwork {
     for (let i=0; i<this.biases.length; i++) {
       this.biases[i] = this.mutateArray(this.biases[i], mutationStrength)
     }
-/*
-    if (Math.random()<.5) {
-      let weightLayer = this.weights[Math.floor(Math.random()*this.weights.length)]
-      weightLayer = this.mutateArray(weightLayer, mutationStrength)
-    } else {
-      let biaseLayer = this.biases[Math.floor(Math.random()*this.biases.length)]
-      biaseLayer = this.mutateArray(biaseLayer, mutationStrength)
-    }
-*/
   }
 
   mutateArray(arr, mutationStrength) {
     for (let i=0; i<arr.length; i++) arr[i] += (Math.random()-.5)*mutationStrength
-    //arr[Math.floor(Math.random()*arr.length)] += (Math.random()-.5)*mutationStrength
     return arr
-  }
-
-  isArray(obj) {
-    return typeof obj=="object"&&obj.toString()!=({}).toString()
   }
 
   clone() {

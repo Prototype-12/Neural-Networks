@@ -1,8 +1,8 @@
 class NeuralNetwork {
   weights
   biases
-  leakyReLUAlpha = .1
-  learnRate = .1
+  leakyReLUAlpha = .01
+  learnRate = .01
   clampRange = 10
   minError = .01
   maxEpochs = 3e3
@@ -149,7 +149,6 @@ class NeuralNetwork {
       }
       predError.unshift(layerError)//add to front
     }
-
     return [predError, forwardPassData]
   }
 
