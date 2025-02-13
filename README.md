@@ -67,7 +67,7 @@ ai.maxEpochs = 5000 // max tries a network will try to get better
 
 ## Demo
 
-[DEMO](https://commandninja.github.io/Neural-Networks)
+[DEMO](https://prototype-12.github.io/Neural-Networks)
 
 ## Advanced
 
