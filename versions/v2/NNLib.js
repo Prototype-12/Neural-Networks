@@ -229,6 +229,7 @@ this.vB[i][j] += ((dB**2)-this.vB[i][j]) * (1-this.beta2)
 
   clone() {
     let clone = new NeuralNetwork([1])
+    clone.layers = structuredClone(this.layers)
     clone.weights = structuredClone(this.weights)
     clone.biases = structuredClone(this.biases)
     clone.leakyReLUAlpha = this.leakyReLUAlpha
