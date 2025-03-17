@@ -7,13 +7,13 @@ Simple library for neural networks(includes backpropagation)
 Import from Github
 
 ```html
-<script src="https://commandninja.github.io/Neural-Networks/neuralNetworkLib.js"></script>
+<script src="https://prototype-12.github.io/Neural-Networks/neuralNetworkLib.js"></script>
 ```
 
 or download it and import from the file
 
 ```html
-<script src="neuralNetworkLib.js"></script>
+<script src="NNLib.js"></script>
 ```
 
 ## Initializing
@@ -24,7 +24,7 @@ And it supports creating multiple hidden layers
 
 ```js
 var ai = new Neuralnetwork([2, 3, 1])
-var ai2 = new Neuralnetwork([5, 10, 10, 1])
+var ai2 = new Neuralnetwork([5, 10, 10, 5])
 ```
 
 ## Running
@@ -51,7 +51,7 @@ ai.train(trainingData) //this will train it
 ```
 
 
-[An array containing [arrays that contain an [inputs] and an [outputs array]]]
+Training data is an [array containing [arrays that contain an [inputs] and an [outputs array]]]
 
 ## Changing settings
 
@@ -60,7 +60,6 @@ Settings are local to a network
 ```js
 ai.leakyReLUAlpha = .01 // messes with the leakyReLU function
 ai.learnRate = .01 // multipler for the changes of each epoch
-ai.clampRange = 1 // changes the max, a weight or bias is allowed to change each epoch
 ai.minError = .001 // min error needed to auto finish
 ai.maxEpochs = 5000 // max tries a network will try to get better
 ```
