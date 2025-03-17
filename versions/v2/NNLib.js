@@ -1,30 +1,15 @@
 class NeuralNetwork {
   leakyReLUAlpha = .01
-  learnRate = .1
+  learnRate = .01
   minError = .01
   maxEpochs = 3e3
   weights = []
   biases = []
-  t = 0
-  beta1 = .9
-  beta2 = .999
-  epsilon = 1e-8
-  layers = []
 
   constructor (layers, options={}) {
-    this.layers = layers
-    this.weights = this.initWeights(layers)
-    this.biases = this.initBiases(layers)
-    this.resetAdam()
+    this.initializeWeights(layers)
+    this.initializeBiases(layers)
     this.mutate(options.weightsRandomness==undefined?2:options.weightsRandomness)
-  }
-
-  resetAdam() {
-    this.t = 1
-    this.mW = this.initWeights(this.layers)
-    this.vW = structuredClone(this.mW)
-    this.mB = this.initBiases(this.layers)
-    this.vB = structuredClone(this.mB)
   }
 
   train(trainData) {
@@ -32,14 +17,14 @@ class NeuralNetwork {
     let startingBiases = structuredClone(this.biases)
     let startingError = this.getTotalError(trainData)
     let networkError = 0
-    this.resetAdam()
+
     for (let i=0; i<this.maxEpochs; i++) {
 
-      let gradientNetworks = []
+      let changeNetworks = []
       for (let j=0; j<trainData.length; j++) {
-        gradientNetworks.push(this.makeGradientNetwork(trainData[j]))
+        changeNetworks.push(this.makeChangeNetwork(trainData[j]))
       }
-      this.applyGradientNetworksAdam(gradientNetworks, this.learnRate)
+      this.applyChangeNetworks(changeNetworks, this.learnRate)//this.learnRate*(i/this.maxEpochs))
 
       networkError = this.getTotalError(trainData)
 
@@ -78,43 +63,23 @@ class NeuralNetwork {
     return totalDataError
   }
 
-  applyGradientNetworksAdam(gradientNetworks, learnRate) {
-    this.t++
-    for (let i=0; i<this.weights.length; i++) {
-      for (let j=0; j<this.weights[i].length; j++) {
-        let dW = 0
-        for (let k=0; k<gradientNetworks.length; k++) {
-          dW += gradientNetworks[k].weights[i][j]
+  applyChangeNetworks(networks, learnRate) {
+    let multiplier = learnRate/networks.length
+    for (let k=0; k<networks.length; k++) {
+      for (let i=0; i<this.weights.length; i++) {
+        for (let j=0; j<this.weights[i].length; j++) {
+          this.weights[i][j] += networks[k].weights[i][j]*multiplier
         }
-        dW /= gradientNetworks.length
-//        this.mW[i][j] = this.mW[i][j] * this.beta1 + (dW) * (1-this.beta1)
-//        this.vW[i][j] = this.vW[i][j] * this.beta2 + (dW**2) * (1-this.beta2)
-this.mW[i][j] += (dW-this.mW[i][j]) * (1-this.beta1)
-this.vW[i][j] += ((dW**2)-this.vW[i][j]) * (1-this.beta2)
-        let mWHat = this.mW[i][j] / (1-(this.beta1**this.t))
-        let vWHat = this.vW[i][j] / (1-(this.beta2**this.t))
-        this.weights[i][j] += learnRate * mWHat / ((vWHat**.5) + this.epsilon)
       }
-    }
-    for (let i=0; i<this.biases.length; i++) {
-      for (let j=0; j<this.biases[i].length; j++) {
-        let dB = 0
-        for (let k=0; k<gradientNetworks.length; k++) {
-          dB += gradientNetworks[k].biases[i][j]
+      for (let i=0; i<this.biases.length; i++) {
+        for (let j=0; j<this.biases[i].length; j++) {
+          this.biases[i][j] += networks[k].biases[i][j]*multiplier
         }
-        dB /= gradientNetworks.length
-//        this.mB[i][j] = this.mB[i][j] * this.beta1 + (dB) * (1-this.beta1)
-//        this.vB[i][j] = this.vB[i][j] * this.beta2 + (dB**2) * (1-this.beta2)
-this.mB[i][j] += (dB-this.mB[i][j]) * (1-this.beta1)
-this.vB[i][j] += ((dB**2)-this.vB[i][j]) * (1-this.beta2)
-        let mBHat = this.mB[i][j] / (1-(this.beta1**this.t))
-        let vBHat = this.vB[i][j] / (1-(this.beta2**this.t))
-        this.biases[i][j] += learnRate * mBHat / ((vBHat**.5) + this.epsilon)
       }
     }
   }
 
-  makeGradientNetwork(trainingQuestion) {
+  makeChangeNetwork(trainingQuestion) {
     let modifiers = this.getBackwardsPassData(trainingQuestion)
     let predError = modifiers[0]
     let forwardPassData = modifiers[1]
@@ -197,20 +162,16 @@ this.vB[i][j] += ((dB**2)-this.vB[i][j]) * (1-this.beta2)
     return v>0?1:this.leakyReLUAlpha
   }
 
-  initWeights(layers) {
-    let weights = []
+  initializeWeights(layers, randomStrength) {
     for (let i=0; i<layers.length-1; i++) {
-      weights.push(new Array(layers[i]*layers[i+1]).fill(0))
+      this.weights.push(new Array(layers[i]*layers[i+1]).fill(0))
     }
-    return weights
   }
 
-  initBiases(layers) {
-    let biases = []
+  initializeBiases(layers, randomStrength) {
     for (let i=0; i<layers.length-1; i++) {
-      biases.push(new Array(layers[i+1]).fill(0))
+      this.biases.push(new Array(layers[i+1]).fill(0))
     }
-    return biases
   }
 
   mutate(mutationStrength) {
@@ -229,7 +190,6 @@ this.vB[i][j] += ((dB**2)-this.vB[i][j]) * (1-this.beta2)
 
   clone() {
     let clone = new NeuralNetwork([1])
-    clone.layers = structuredClone(this.layers)
     clone.weights = structuredClone(this.weights)
     clone.biases = structuredClone(this.biases)
     clone.leakyReLUAlpha = this.leakyReLUAlpha
