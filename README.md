@@ -1,13 +1,13 @@
 # Neural-Networks
 
-Simple library for neural networks(includes backpropagation)
+Simple library for neural networks
 
 ## How to install
 
 Import from Github
 
 ```html
-<script src="https://prototype-12.github.io/Neural-Networks/neuralNetworkLib.js"></script>
+<script src="https://prototype-12.github.io/Neural-Networks/versions/v3/NNLib.js"></script>
 ```
 
 or download it and import from the file
@@ -81,10 +81,8 @@ All functions and values in the class are public so they can be changed
 
 Uses leakyReLU
 
-Not fast (I should have used matrixes)
+v3 Uses Adam
 
-When training data is input its trained as batches
-
-Any non finite number(null, undefined, Infinity, -Infinity) will be turned to 0
+When training data is input, it's trained as a batch
 
 The trainer will return the original network if the current error exceeds the original error
